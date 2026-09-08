@@ -1,0 +1,10 @@
+{
+  "name": "kp-gesture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "python3 scripts/serve.py",
+    "test": "bun test",
+    "build:check": "bun build src/app.js --target=browser --outdir .context/build-check"
+  }
+}
