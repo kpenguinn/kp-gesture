@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gesture Navigator</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="camera-stage" aria-label="Gesture camera">
+        <div class="video-shell">
+          <video id="webcam" class="webcam" autoplay playsinline muted></video>
+          <canvas id="overlay" class="overlay"></canvas>
+          <div id="gazePreview" class="gaze-preview" aria-hidden="true"></div>
+          <button id="calibrationTarget" class="calibration-target" type="button" aria-label="Capture calibration point">
+            <span id="calibrationStepLabel">1</span>
+          </button>
+          <div class="scan-line" aria-hidden="true"></div>
+          <div class="camera-empty" id="cameraEmpty">
+            <span class="empty-mark" aria-hidden="true"></span>
+            <span>Camera idle</span>
+          </div>
+        </div>
+
+        <div class="toolbar" aria-label="Camera controls">
+          <button id="cameraButton" class="primary-button" type="button">
+            <span class="button-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M15 10l4.55-2.28A1 1 0 0 1 21 8.62v6.76a1 1 0 0 1-1.45.9L15 14v-4Z"></path>
+                <rect x="3" y="6" width="12" height="12" rx="2"></rect>
+              </svg>
+            </span>
+            <span id="cameraButtonText">Start camera</span>
+          </button>
+          <button id="backButton" class="icon-button" type="button" aria-label="Back" title="Back">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="m15 18-6-6 6-6"></path>
+            </svg>
+          </button>
+          <button id="forwardButton" class="icon-button" type="button" aria-label="Forward" title="Forward">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+          <button id="calibrateButton" class="icon-button" type="button" aria-label="Recenter gaze" title="Recenter gaze">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2v4"></path>
+              <path d="M12 18v4"></path>
+              <path d="M2 12h4"></path>
+              <path d="M18 12h4"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+          <button id="fullCalibrationButton" class="icon-button" type="button" aria-label="Calibrate gaze" title="Calibrate gaze">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="2"></circle>
+              <circle cx="5" cy="12" r="2"></circle>
+              <circle cx="19" cy="12" r="2"></circle>
+              <circle cx="12" cy="5" r="2"></circle>
+              <circle cx="12" cy="19" r="2"></circle>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="nav-stage" aria-label="Gesture actions">
+        <header class="status-row">
+          <div>
+            <p class="eyebrow">Live gesture state</p>
+            <h1>Gesture Navigator</h1>
+          </div>
+          <div id="signal" class="signal idle">
+            <span></span>
+            <strong>Idle</strong>
+          </div>
+        </header>
+
+        <div class="route-panel">
+          <div class="route-kicker">Current target</div>
+          <h2 id="routeTitle">Overview</h2>
+          <p id="routeBody">The first navigation target is selected. Start the camera to control window actions with hand gestures.</p>
+        </div>
+
+        <div class="progress-track" aria-label="Navigation progress">
+          <span id="progressFill"></span>
+        </div>
+
+        <div class="tuning-panel" aria-label="Gaze tuning">
+          <label class="range-control">
+            <span>Horizontal</span>
+            <input id="horizontalGain" type="range" min="2" max="9" step="0.1" value="5.2">
+            <output id="horizontalGainValue">5.2</output>
+          </label>
+          <label class="range-control">
+            <span>Vertical</span>
+            <input id="verticalGain" type="range" min="2" max="9" step="0.1" value="4.4">
+            <output id="verticalGainValue">4.4</output>
+          </label>
+          <label class="range-control">
+            <span>Smoothing</span>
+            <input id="gazeSmoothing" type="range" min="0.15" max="0.75" step="0.01" value="0.42">
+            <output id="gazeSmoothingValue">0.42</output>
+          </label>
+          <label class="toggle-control">
+            <input id="invertGazeX" type="checkbox" checked>
+            <span>Flip X</span>
+          </label>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <span>Gesture</span>
+            <strong id="gestureLabel">None</strong>
+          </div>
+          <div class="metric">
+            <span>Action</span>
+            <strong id="movementLabel">None</strong>
+          </div>
+          <div class="metric">
+            <span>Page</span>
+            <strong id="pageLabel">1 / 4</strong>
+          </div>
+          <div class="metric">
+            <span>Gaze</span>
+            <strong id="gazeLabel">No face</strong>
+          </div>
+          <div class="metric">
+            <span>Cursor</span>
+            <strong id="cursorLabel">Waiting</strong>
+          </div>
+        </div>
+
+        <div class="history-list" id="historyList" aria-label="Gesture history">
+          <div class="history-item">
+            <span class="history-dot"></span>
+            <span>No navigation yet</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="virtualCursor" class="virtual-cursor" aria-hidden="true"></div>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
